@@ -24,7 +24,7 @@ class StoreAppointmentRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'string|required|max:250',
+            'email' => 'email|required|max:250',
             'first_name' => 'string|required|max:50',
             'last_name' => 'string|required:max:50',
             'slot_time' => 'date_format:H:i:s|required',

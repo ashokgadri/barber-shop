@@ -13,6 +13,11 @@ class AppointmentRepository
     {
     }
 
+    /**
+     * Check the availability of the slot
+     * Get all the schedule for the slot time and compare with the max allowed client per slot
+     */
+
     public function checkAvailability($schedule, $slotTime)
     {
         $scheduledAppointmentsInSlot = $this->getScheduledAppointmentInSlot($schedule, $slotTime);
@@ -22,10 +27,20 @@ class AppointmentRepository
         return false;
     }
 
+    /**
+     * 
+     * Get all the appointment at particular slot
+     */
+
     private function getScheduledAppointmentInSlot($schedule, $slotTime)
     {
         return $this->model->where('schedule_id', $schedule->id)->where('slot_time', $slotTime)->get();
     }
+
+    /**
+     * 
+     * Store the appointment
+     */
 
     public function store($schedule, $data)
     {

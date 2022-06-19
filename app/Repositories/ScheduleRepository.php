@@ -14,20 +14,40 @@ class ScheduleRepository
     {
     }
 
+    /**
+     * 
+     * Get all the schedules. I have't included any limiting to it for now. We can limit it later on based on requirement
+     */
+
     public function getSchedules()
     {
-        return $this->model->with(['scheduleBreaks', 'scheduledAppointments'])->orderBy('date')->get();
+        return $this->model->with(['scheduleBreaks', 'appointments'])->orderBy('date')->get();
     }
+
+    /**
+     * 
+     * Get all the schedules for the day
+     */
 
     public function getSchedulesForDay($data)
     {
-        return $this->model->with(['scheduleBreaks', 'scheduledAppointments'])->where('date', $data['date'])->get();
+        return $this->model->with(['scheduleBreaks', 'appointments'])->where('date', $data['appointment_date'])->get();
     }
+
+    /**
+     * 
+     * Get single schedule detail based on id
+     */
 
     public function getSchedule($scheduleId)
     {
         return $this->model->where('id', $scheduleId)->first();
     }
+
+    /**
+     * 
+     * It will verify the appointment slot is valid or not
+     */
 
     public function checkValidSlot($schedule, $slotTime)
     {
@@ -50,6 +70,10 @@ class ScheduleRepository
         return false;
     }
 
+    /**
+     * 
+     * Check if the appointment slot is in between the schedule date/time
+     */
     private function slotInSchedule($schedule, $slotTime)
     {
         if ($schedule->is_holiday) {
@@ -65,6 +89,11 @@ class ScheduleRepository
 
         return true;
     }
+
+    /**
+     * 
+     * Check if the appointment slot is in break time or not.
+     */
 
     private function slotInBreakTime($schedule, $slotTime)
     {
@@ -83,6 +112,11 @@ class ScheduleRepository
         return false;
     }
 
+
+    /**
+     * Check if it is valid slot. It will check if slot time is not random while 
+     * it should be based on the slot in minutes and break time between slots
+     */
     private function isValidSlot($schedule, $slotTime)
     {
         $allDaySlots = $this->getAllDaySlots($schedule);
@@ -92,6 +126,11 @@ class ScheduleRepository
 
         return true;
     }
+
+    /**
+     * 
+     * Get all the slots for the schedule
+     */
 
     private function getAllDaySlots($schedule)
     {

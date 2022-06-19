@@ -9,7 +9,8 @@ return [
             'schedule_not_exists' => 'Schedule does not exists',
             'invalid_slot' => 'Slot time is invalid',
             'already_booked' => 'Slot is already booked',
-            'booked' => 'Slot booked successfully'
+            'booked' => 'Slot booked successfully',
+            'not_valid_slot' => 'Slot time is invalid'
         ]
     ]
 ];

@@ -24,7 +24,7 @@ class ShowAppointmentRequest extends FormRequest
     public function rules()
     {
         return [
-            'date' => 'date_format:Y-m-d|required',
+            'appointment_date' => 'date_format:Y-m-d|required',
         ];
     }
 }
