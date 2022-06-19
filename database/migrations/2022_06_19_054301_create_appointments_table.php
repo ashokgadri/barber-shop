@@ -18,8 +18,9 @@ return new class extends Migration
             $table->string('email', 250);
             $table->string('first_name', 50);
             $table->string('last_name', 50);
-            $table->dateTimeTz('slot_time');
-            $table->integer('scheduling_event_id');
+            $table->date('slot_date');
+            $table->time('slot_time');
+            $table->integer('schedule_id');
             $table->timestamps();
         });
     }

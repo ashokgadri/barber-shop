@@ -21,6 +21,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::namespace('api/v1')->prefix('v1')->as('.v1')->group(function () {
     Route::get('appointments', [AppointmentController::class, 'index']);
-    Route::get('appointments/{date}', [AppointmentController::class, 'show']);
+    Route::get('appointment', [AppointmentController::class, 'show']);
     Route::post('appointment', [AppointmentController::class, 'store']);
 });
