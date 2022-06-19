@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\AppointmentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,4 +17,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::namespace('api/v1')->prefix('v1')->as('.v1')->group(function () {
+    Route::get('appointments', [AppointmentController::class, 'index']);
+    Route::get('appointments/{date}', [AppointmentController::class, 'show']);
+    Route::post('appointment', [AppointmentController::class, 'store']);
 });
