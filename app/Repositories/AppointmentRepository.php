@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Exceptions\GeneralExceptioon;
 use App\Models\Appointment;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -55,7 +56,8 @@ class AppointmentRepository
             // Check the availability of the slot. Is is it already booked or available
             $slotAvailable = $this->checkAvailability($schedule, $appointmentDatetime);
             if (!$slotAvailable) {
-                return response()->json(['message' => trans('api.messages.appointment.already_booked')], 422);
+                //return response()->json(['message' => trans('api.messages.appointment.already_booked')], 422);
+                throw new GeneralExceptioon(trans('api.messages.appointment.already_booked'));
             }
 
             $appointment = self::MODEL;

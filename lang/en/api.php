@@ -13,7 +13,7 @@ return [
             'not_valid_slot' => 'Slot time is invalid',
             'appointment_in_past' => 'Appointment is not allowed in past',
             'appointment_in_future' => 'Appointment is not allowed in future more than :days days',
-            'public_holidays' => 'You are trying to book slot on public holiday'
+            'public_holiday' => 'You are trying to book slot on public holiday'
         ]
     ]
 ];

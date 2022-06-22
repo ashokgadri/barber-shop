@@ -24,8 +24,6 @@ class ScheduleRepository
     public function getSchedules()
     {
 
-        //->where('slot_date', '<=', DB::raw(Carbon::now()->toDateString() . ' + schedules.slots_for_next_days'))
-        //->where('holiday', '<=', DB::raw(Carbon::now()->toDateString() . ' + schedules.slots_for_next_days'))
         return Cache::remember('schedules', 5 * 60, function () {
             return $this->model->with(['scheduleBreaks', 'appointments' => function ($query) {
                 $query->where('slot_date', '>=', Carbon::now()->toDateString())
