@@ -27,8 +27,8 @@ class StoreAppointmentRequest extends FormRequest
             'email' => 'email|required|max:250',
             'first_name' => 'string|required|max:50',
             'last_name' => 'string|required:max:50',
-            'slot_time' => 'date_format:H:i:s|required',
-            'schedule_id' => 'integer|required|exists:schedules,id'
+            'appointment_datetime' => 'date_format:Y-m-d H:i:s|required',
+            'schedule_id' => 'integer|required'
         ];
     }
 }

@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\DayBreak;
 use App\Models\Schedule;
 use App\Models\ScheduleBreak;
+use App\Models\ScheduleDays;
+use App\Models\ScheduleHolidays;
 use App\Models\SchedulingEvent;
 use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -37,91 +39,80 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Woman Haircut'
             ]);
 
-            // Get current date
-            $date = Carbon::now();
+            $menSchedule = Schedule::create([
+                'event_id' => $menHairCut->id,
+                'slots_in_minutes' => 10,
+                'max_client_per_slot' =>  3,
+                'cleanup_break_between_slot' =>  5,
+                'slots_for_next_days' => 7
+            ]);
 
-            // Loop through seven days
-            for ($i = 0; $i < 7; $i++) {
-                $timings =  match ($date->weekday()) {
-                    Carbon::MONDAY => ['start' => '08:00', 'end' => '20:00'],
-                    Carbon::TUESDAY => ['start' => '08:00', 'end' => '20:00'],
-                    Carbon::WEDNESDAY => ['start' => '08:00', 'end' => '20:00'],
-                    Carbon::THURSDAY => ['start' => '08:00', 'end' => '20:00'],
-                    Carbon::FRIDAY => ['start' => '08:00', 'end' => '20:00'],
-                    Carbon::SATURDAY => ['start' => '10:00', 'end' => '22:00'],
-                    Carbon::SUNDAY => ['start' => null, 'end' => null, 'holiday' => true],
-                };
+            $womanSchedule = Schedule::create([
+                'event_id' => $womanHairCut->id,
+                'slots_in_minutes' =>  60,
+                'max_client_per_slot' => 3,
+                'cleanup_break_between_slot' => 10,
+                'slots_for_next_days' => 7
+            ]);
 
-                $holiday = $timings['holiday'] ?? false;
-                if ($i == 2) {
-                    $holiday = true;
-                }
+            ScheduleBreak::create([
+                'break_id' => $lunchBreak->id,
+                'schedule_id' => $menSchedule->id,
+                'start_time' => '12:00',
+                'end_time' => '13:00'
+            ]);
 
-                $startTime = $holiday ? null :   $timings['start'];
-                $endTime = $holiday ? null : $timings['end'];
+            ScheduleBreak::create([
+                'break_id' => $cleaningBreak->id,
+                'schedule_id' => $menSchedule->id,
+                'start_time' => '15:00',
+                'end_time' => '16:00'
+            ]);
 
 
-                $menSchedule = Schedule::create([
-                    'event_id' => $menHairCut->id,
-                    'date' => $date->toDate(),
+            $days = [
+                Carbon::MONDAY => ['start' => '08:00', 'end' => '20:00'],
+                Carbon::TUESDAY => ['start' => '08:00', 'end' => '20:00'],
+                Carbon::WEDNESDAY => ['start' => '08:00', 'end' => '20:00'],
+                Carbon::THURSDAY => ['start' => '08:00', 'end' => '20:00'],
+                Carbon::FRIDAY => ['start' => '08:00', 'end' => '20:00'],
+                Carbon::SATURDAY => ['start' => '10:00', 'end' => '22:00'],
+                Carbon::SUNDAY => ['start' => null, 'end' => null, 'holiday' => true]
+            ];
+
+            foreach ($days as $day_id => $day) {
+
+                $holiday = $day['holiday'] ?? false;
+
+                $startTime = $holiday ? null :   $day['start'];
+                $endTime = $holiday ? null : $day['end'];
+
+                ScheduleDays::create([
+                    'schedule_id' => $menSchedule->id,
+                    'int_day' => $day_id,
                     'start_time' => $startTime,
                     'end_time' => $endTime,
-                    'is_holiday' => $holiday,
-                    'slots_in_minutes' => $holiday ? null :  10,
-                    'max_client_per_slot' => $holiday ? null :  3,
-                    'cleanup_break_between_slot' => $holiday ? null :  5
+                    'is_holiday' => $holiday
                 ]);
 
-                if (!$holiday) {
-                    ScheduleBreak::create([
-                        'break_id' => $lunchBreak->id,
-                        'schedule_id' => $menSchedule->id,
-                        'date' => $date->toDate(),
-                        'start_time' => '12:00',
-                        'end_time' => '13:00'
-                    ]);
-
-                    ScheduleBreak::create([
-                        'break_id' => $cleaningBreak->id,
-                        'schedule_id' => $menSchedule->id,
-                        'date' => $date->toDate(),
-                        'start_time' => '15:00',
-                        'end_time' => '16:00'
-                    ]);
-                }
-
-
-
-                $womanSchedule = Schedule::create([
-                    'event_id' => $womanHairCut->id,
-                    'date' => $date->toDate(),
+                ScheduleDays::create([
+                    'schedule_id' => $womanSchedule->id,
+                    'int_day' => $day_id,
                     'start_time' => $startTime,
                     'end_time' => $endTime,
-                    'is_holiday' => $holiday,
-                    'slots_in_minutes' => $holiday ? null :  60,
-                    'max_client_per_slot' => $holiday ? null : 3,
-                    'cleanup_break_between_slot' => $holiday ? null : 10
+                    'is_holiday' => $holiday
                 ]);
-
-                if (!$holiday) {
-                    ScheduleBreak::create([
-                        'break_id' => $lunchBreak->id,
-                        'schedule_id' => $womanSchedule->id,
-                        'date' => $date->toDate(),
-                        'start_time' => '12:00',
-                        'end_time' => '13:00'
-                    ]);
-
-                    ScheduleBreak::create([
-                        'break_id' => $cleaningBreak->id,
-                        'schedule_id' => $womanSchedule->id,
-                        'date' => $date->toDate(),
-                        'start_time' => '15:00',
-                        'end_time' => '16:00'
-                    ]);
-                }
-                $date->addDay();
             }
+            // Get current date
+            ScheduleHolidays::create([
+                'schedule_id' => $menSchedule->id,
+                'holiday' => Carbon::now()->addDays(2)->toDateString()
+            ]);
+
+            ScheduleHolidays::create([
+                'schedule_id' => $womanSchedule->id,
+                'holiday' => Carbon::now()->addDays(2)->toDateString()
+            ]);
         });
     }
 }

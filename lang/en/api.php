@@ -10,7 +10,10 @@ return [
             'invalid_slot' => 'Slot time is invalid',
             'already_booked' => 'Slot is already booked',
             'booked' => 'Slot booked successfully',
-            'not_valid_slot' => 'Slot time is invalid'
+            'not_valid_slot' => 'Slot time is invalid',
+            'appointment_in_past' => 'Appointment is not allowed in past',
+            'appointment_in_future' => 'Appointment is not allowed in future more than :days days',
+            'public_holidays' => 'You are trying to book slot on public holiday'
         ]
     ]
 ];
