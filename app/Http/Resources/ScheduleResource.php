@@ -17,15 +17,13 @@ class ScheduleResource extends JsonResource
         return [
             'id' => $this->id,
             'eventName' => $this->event->name,
-            'date' => $this->date,
-            'startTime' => $this->start_time,
-            'endtime' => $this->end_time,
-            'isHoliday' => $this->is_holiday,
+            'days' => ScheduleDayResource::collection($this->days),
+            'holidays' => ScheduleHolidayResource::collection($this->holidays),
             'slotsInMinutes' => $this->slots_in_minutes,
             'maxClientPerSlot' => $this->max_client_per_slot,
             'cleanupBreakBetweenSlot' => $this->cleanup_break_between_slot,
-            'scheduleBreaks' => ScheduleBreakResource::collection($this->scheduleBreaks),
-            'scheduledAppointments' => ScheduleAppointmentResource::collection($this->appointments)
+            'breaks' => ScheduleBreakResource::collection($this->scheduleBreaks),
+            'appointments' => ScheduleAppointmentResource::collection($this->appointments)
         ];
     }
 }

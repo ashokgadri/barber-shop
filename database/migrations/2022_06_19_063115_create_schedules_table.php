@@ -16,13 +16,14 @@ return new class extends Migration
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
             $table->integer('event_id');
-            $table->date('date');
-            $table->time('start_time')->nullable();
-            $table->time('end_time')->nullable();
-            $table->boolean('is_holiday')->default(false);
-            $table->integer('slots_in_minutes')->nullable();
-            $table->integer('max_client_per_slot')->nullable();
-            $table->integer('cleanup_break_between_slot')->nullable();
+            //$table->date('date');
+            //$table->time('start_time')->nullable();
+            //$table->time('end_time')->nullable();
+            //$table->boolean('is_holiday')->default(false);
+            $table->integer('slots_in_minutes');
+            $table->integer('max_client_per_slot');
+            $table->integer('cleanup_break_between_slot');
+            $table->integer('slots_for_next_days');
             $table->timestamps();
         });
     }

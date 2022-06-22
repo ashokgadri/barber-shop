@@ -23,4 +23,20 @@ class Schedule extends Model
     {
         return $this->hasMany(Appointment::class, 'schedule_id', 'id');
     }
+
+    public function days()
+    {
+        return $this->hasMany(ScheduleDays::class, 'schedule_id', 'id');
+    }
+
+    public function holidays()
+    {
+        return $this->hasMany(ScheduleHolidays::class, 'schedule_id', 'id');
+    }
+
+    public function scopeWithAndWhereHas($query, $relation, $constraint)
+    {
+        return $query->whereHas($relation, $constraint)
+            ->with([$relation => $constraint]);
+    }
 }
