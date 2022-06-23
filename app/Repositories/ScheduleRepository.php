@@ -23,12 +23,8 @@ class ScheduleRepository
 
     public function getSchedules()
     {
-
-        return Cache::remember('schedules', 5 * 60, function () {
-            return $this->model->with(['scheduleBreaks', 'appointments' => function ($query) {
-                $query->where('slot_date', '>=', Carbon::now()->toDateString())
-                    ->groupBy('slot_date')->groupBy('slot_time')->select('slot_date', 'slot_time');
-            }, 'days', 'holidays' => function ($query) {
+        return  Cache::remember('schedules', 0, function () {
+            return $this->model->with(['scheduleBreaks', 'days', 'holidays' => function ($query) {
                 $query->where('holiday', '>=', Carbon::now()->toDateString());
             }])->get();
         });

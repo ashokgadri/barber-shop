@@ -72,4 +72,9 @@ class AppointmentRepository
             return $appointment;
         });
     }
+
+    public function getScheduledAppointments($scheduleIds)
+    {
+        return $this->model->whereIn('schedule_id', $scheduleIds)->where('slot_date', '>=', Carbon::now()->toDateString())->groupBy('schedule_id', 'slot_date', 'slot_time')->select('schedule_id', 'slot_date', 'slot_time', DB::raw('count(schedule_id) as booked'));
+    }
 }

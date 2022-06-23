@@ -34,6 +34,20 @@ class AppointmentController extends Controller
     public function index()
     {
         $schedules = $this->scheduleRepository->getSchedules();
+        if ($schedules->isNotEmpty()) {
+            $appointments = $this->appointmentRepository->getScheduledAppointments($schedules->pluck('id')->all());
+            $schedules->transform(function ($schedule) use ($appointments) {
+                $appointmentsSchedule = $appointments->where('schedule_id', $schedule->id)->get();
+                if ($appointmentsSchedule->isNotEmpty()) {
+                    $appointmentsSchedule->transform(function ($appointment) use ($schedule) {
+                        $appointment->availability = $schedule->max_client_per_slot - $appointment->booked;
+                        return $appointment;
+                    });
+                }
+                $schedule->appointments = $appointmentsSchedule;
+                return $schedule;
+            });
+        }
         return response()->json(ScheduleResource::collection($schedules));
     }
 
