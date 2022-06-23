@@ -23,7 +23,7 @@ class ScheduleRepository
 
     public function getSchedules()
     {
-        return  Cache::remember('schedules', 0, function () {
+        return  Cache::remember('schedules', 5 * 60, function () {
             return $this->model->with(['scheduleBreaks', 'days', 'holidays' => function ($query) {
                 $query->where('holiday', '>=', Carbon::now()->toDateString());
             }])->get();
